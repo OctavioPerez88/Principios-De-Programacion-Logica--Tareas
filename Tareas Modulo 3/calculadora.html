@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mesa De Calculo</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
+    <style>
+
+        body {
+            background-color: #5a3b22;
+            background-image: 
+                repeating-linear-gradient(45deg, #4e331c 25%, transparent 25%, transparent 75%, #4e331c 75%, #4e331c), 
+                repeating-linear-gradient(45deg, #4e331c 25%, #5a3b22 25%, #5a3b22 75%, #4e331c 75%, #4e331c);
+            background-position: 0 0, 16px 16px;
+            background-size: 32px 32px;
+            font-family: 'VT323', monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            user-select: none;
+            cursor: crosshair; 
+        }
+
+        .calculadora {
+            width: 340px;
+            background: #C6C6C6; 
+            border: 4px solid;
+            border-top-color: #FFFFFF;
+            border-left-color: #FFFFFF;
+            border-bottom-color: #555555;
+            border-right-color: #555555;
+            padding: 20px;
+            box-shadow: 10px 10px 0px rgba(0,0,0,0.6);
+        }
+
+        .barra-titulo {
+            color: #3f3f3f;
+            font-size: 32px;
+            margin-bottom: 20px;
+            text-align: center;
+            text-shadow: 2px 2px 0px #ffffff;
+            letter-spacing: 2px;
+        }
+
+    
+        input {
+            width: 100%;
+            box-sizing: border-box;
+            height: 50px;
+            text-align: right;
+            font-size: 26px;
+            padding-right: 15px;
+            margin-bottom: 15px;
+            background: #8B8B8B;
+            color: #FFFFFF;
+            border: 4px solid;
+            border-top-color: #373737;
+            border-left-color: #373737;
+            border-bottom-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            font-family: 'VT323', monospace;
+            outline: none;
+            cursor: text;
+        }
+
+        input:focus {
+            background: #000000;
+        }
+
+        input::placeholder {
+            color: #DDDDDD;
+        }
+
+        .fila {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            flex: 1;
+            height: 55px;
+            background: #C6C6C6;
+            color: #000000;
+            font-size: 30px;
+            font-family: 'VT323', monospace;
+            cursor: crosshair;
+            border: 4px solid;
+            border-top-color: #FFFFFF;
+            border-left-color: #FFFFFF;
+            border-bottom-color: #555555;
+            border-right-color: #555555;
+            transition: all 0.1s;
+        }
+
+        button:hover {
+            background: #5E7DE6;
+            color: #FFFFFF;
+            text-shadow: 2px 2px 0px #3E5A96;
+            border-top-color: #8C9EFF;
+            border-left-color: #8C9EFF;
+            border-bottom-color: #2F3E73;
+            border-right-color: #2F3E73;
+        }
+
+        button:active {
+            border-top-color: #555555;
+            border-left-color: #555555;
+            border-bottom-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            padding-top: 4px;
+            padding-left: 4px;
+        }
+
+        #resultado {
+            margin-top: 20px;
+            background: #000000;
+            color: #FFFF55; 
+            border: 4px solid;
+            border-top-color: #373737;
+            border-left-color: #373737;
+            border-bottom-color: #FFFFFF;
+            border-right-color: #FFFFFF;
+            min-height: 45px;
+            padding: 10px;
+            font-size: 28px;
+            text-align: right;
+            box-sizing: border-box;
+            text-shadow: 2px 2px 0px #555500;
+        }
+
+        .xp-container {
+            width: 100%;
+            height: 12px;
+            background: #000000;
+            border: 2px solid #373737;
+            border-radius: 2px;
+            margin-top: 15px;
+            position: relative;
+            box-sizing: border-box;
+        }
+
+        .xp-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #11FF11, #55FF55);
+            width: 0%;
+            transition: width 0.5s ease-out;
+            box-shadow: 0 0 8px #55FF55;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="calculadora">
+
+    <div class="barra-titulo">
+        Mesa De Calculo
+    </div>
+
+    <input type="number" id="num1" placeholder="Bloque 1">
+    <input type="number" id="num2" placeholder="Bloque 2">
+
+    <div class="fila">
+        <button onmousedown="playClick()" onclick="calcular('sumar')">+</button>
+        <button onmousedown="playClick()" onclick="calcular('restar')">−</button>
+    </div>
+
+    <div class="fila">
+        <button onmousedown="playClick()" onclick="calcular('multiplicar')">×</button>
+        <button onmousedown="playClick()" onclick="calcular('dividir')">÷</button>
+    </div>
+
+    <div id="resultado">
+        Esperando items...
+    </div>
+
+    <div class="xp-container">
+        <div class="xp-bar" id="barraXp"></div>
+    </div>
+
+</div>
+
+<script>
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+function playClick() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.type = 'square';
+    osc.frequency.setValueAtTime(100, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    
+    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.05);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+}
+function playDing() {
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(1046.50, audioCtx.currentTime);
+    
+    gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+    
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.5);
+}
+
+function sumar(a, b) { return a + b; }
+function restar(a, b) { return a - b; }
+function multiplicar(a, b) { return a * b; }
+function dividir(a, b) { 
+    if (b === 0) throw new Error("¡Error! División por 0");
+    return a / b; 
+}
+
+function calcular(operacion) {
+    let input1 = document.getElementById("num1").value;
+    let input2 = document.getElementById("num2").value;
+    let xpBar = document.getElementById("barraXp");
+
+    xpBar.style.width = "0%";
+
+    if (input1 === "" || input2 === "") {
+        document.getElementById("resultado").innerHTML = "Faltan datos";
+        document.getElementById("resultado").style.color = "#FF5555";
+        return;
+    }
+
+    let a = Number(input1);
+    let b = Number(input2);
+    let resultado = 0;
+
+    try {
+        switch (operacion) {
+            case "sumar": resultado = sumar(a, b); break;
+            case "restar": resultado = restar(a, b); break;
+            case "multiplicar": resultado = multiplicar(a, b); break;
+            case "dividir": resultado = dividir(a, b); break;
+        }
+
+        if (!Number.isInteger(resultado)) {
+            resultado = resultado.toFixed(2);
+        }
+
+        document.getElementById("resultado").innerHTML = "Total: " + resultado;
+        document.getElementById("resultado").style.color = "#55FF55";
+        
+        setTimeout(() => {
+            playDing();
+            xpBar.style.width = "100%";
+        }, 150);
+
+    } catch (error) {
+        document.getElementById("resultado").innerHTML = error.message;
+        document.getElementById("resultado").style.color = "#FF5555";
+    }
+}
+</script>
+
+</body>
+</html>
