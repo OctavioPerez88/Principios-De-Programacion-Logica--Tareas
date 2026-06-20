@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f1f5f9;
+        }
+        table.table-zebra tbody tr:nth-child(odd) {
+            background-color: #ffffff;
+        }
+        table.table-zebra tbody tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        table.table-zebra tbody tr:hover {
+            background-color: #e2e8f0;
+            transition: background-color 0.1s ease-in-out;
+        }
+
+        body, 
+        h1, 
+        label, 
+        select, 
+        table, 
+        table thead tr th, 
+        table tbody tr td {
+            color: #000000 !important;
+        }
+    </style>
+</head>
+
+<body class="text-black">
+    <main class="container mx-auto px-4 my-10 max-w-5xl bg-white p-8 rounded-2xl shadow-xl border border-slate-100">
+        
+        <h1 class="text-4xl font-bold mb-6 border-b-2 border-slate-200 pb-3">
+         Lista de Productos
+        </h1>
+
+        <div class="mb-8 flex flex-col sm:flex-row items-start sm:items-center gap-4 bg-slate-50 p-5 rounded-xl border border-slate-200 shadow-sm">
+            <label for="filtro" class="font-semibold text-lg">Filtrar por Categoría:</label>
+            <select id="filtro" class="select select-bordered w-full max-w-xs bg-white shadow-sm border-slate-300">
+                <option value="todos">Todas las categorías</option>
+                <option value="Electrónicos">Electrónicos</option>
+                <option value="Accesorios">Accesorios</option>
+                <option value="Muebles">Muebles</option>
+                <option value="Iluminación">Iluminación</option>
+                <option value="Almacenamiento">Almacenamiento</option>
+                <option value="Componentes">Componentes</option>
+                <option value="Redes">Redes</option>
+                <option value="Oficina">Oficina</option>
+                <option value="Ropa">Ropa</option>
+                <option value="Videojuegos">Videojuegos</option>
+                <option value="Hogar">Hogar</option>
+                <option value="Salud">Salud</option>
+                <option value="Herramientas">Herramientas</option>
+                <option value="Software">Software</option>
+            </select>
+        </div>
+
+        <div class="overflow-x-auto rounded-xl shadow-sm border border-slate-200">
+            <table class="table table-zebra w-full text-left">
+                <thead class="bg-slate-200 text-base">
+                    <tr>
+                        <th class="rounded-tl-lg font-semibold py-4">ID</th>
+                        <th class="font-semibold py-4">Nombre</th>
+                        <th class="font-semibold py-4">Precio</th>
+                        <th class="font-semibold py-4">Categoría</th>
+                        <th class="font-semibold py-4">Stock</th>
+                        <th class="rounded-tr-lg font-semibold py-4">Valor Total en Stock</th>
+                    </tr>
+                </thead>
+                <tbody id="products">
+                    </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script src="productos.js"></script>
+    <script src="productos_acciones.js"></script>
+</body>
+</html>
